@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,8 @@ public class AccountsController {
 	@Autowired
 	private IAccountsService iAccountsService;
 	
+	//Create API
+	
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDto> createAccount(@RequestBody CustomerDto customerDto) {
        this.iAccountsService.createAccount(customerDto);
@@ -30,11 +33,27 @@ public class AccountsController {
 				.body(new ResponseDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
 	}
 	
+//	Read API
+	
 	@GetMapping("/fetch")
 	public ResponseEntity<CustomerDto> fetchAccountsDetails(@RequestParam String mobileNumber){
 		CustomerDto fetchDetails = this.iAccountsService.fetchDetails(mobileNumber);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(fetchDetails);
+	}
+	
+	//Update API
+	
+	@PutMapping("/update")
+	public ResponseEntity<ResponseDto> updateAccountDetails(@RequestBody CustomerDto customerDto){
+		boolean updateAccount = this.iAccountsService.updateAccount(customerDto);
+		if(updateAccount) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
+		}else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					.body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_UPDATE));
+		}
 	}
 
 }
