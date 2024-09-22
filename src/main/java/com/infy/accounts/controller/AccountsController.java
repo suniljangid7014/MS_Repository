@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.infy.accounts.constants.AccountsConstants;
@@ -26,6 +28,13 @@ public class AccountsController {
        this.iAccountsService.createAccount(customerDto);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(new ResponseDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
+	}
+	
+	@GetMapping("/fetch")
+	public ResponseEntity<CustomerDto> fetchAccountsDetails(@RequestParam String mobileNumber){
+		CustomerDto fetchDetails = this.iAccountsService.fetchDetails(mobileNumber);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(fetchDetails);
 	}
 
 }

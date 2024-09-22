@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.infy.accounts.constants.AccountsConstants;
+import com.infy.accounts.dto.AccountsDto;
 import com.infy.accounts.dto.CustomerDto;
 import com.infy.accounts.entity.Accounts;
 import com.infy.accounts.entity.Customer;
 import com.infy.accounts.exception.CustomerAlreadyExistsException;
+import com.infy.accounts.exception.ResourceNotFoundException;
+import com.infy.accounts.mapper.AccountsMapper;
 import com.infy.accounts.mapper.CustomerMapper;
 import com.infy.accounts.repository.AccountsRepository;
 import com.infy.accounts.repository.CustomerRepository;
@@ -19,11 +22,14 @@ import com.infy.accounts.service.IAccountsService;
 
 @Service
 public class AccountsServiceImpl implements IAccountsService {
+	
 	@Autowired
 	private AccountsRepository accountsRepository;
+	
 	@Autowired
 	private CustomerRepository customerRepository;
 
+	
 	@Override
 	public void createAccount(CustomerDto customerDto) {
 		
@@ -51,6 +57,20 @@ public class AccountsServiceImpl implements IAccountsService {
 		newAccount.setCreatedAt(LocalDateTime.now());
 		newAccount.setCreatedBy("Sunny");
 		return newAccount;
+	}
+
+	
+	@Override
+	public CustomerDto fetchDetails(String mobileNumber) {
+		Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+				.orElseThrow(() -> new ResourceNotFoundException("Resource Not found with given mobile number"));
+		
+		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+				() -> new ResourceNotFoundException("Account details not found")
+				);
+		CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+		customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+		return customerDto;
 	}
 
 }
