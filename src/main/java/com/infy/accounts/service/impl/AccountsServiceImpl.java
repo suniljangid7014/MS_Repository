@@ -26,8 +26,7 @@ public class AccountsServiceImpl implements IAccountsService {
 
 	@Override
 	public void createAccount(CustomerDto customerDto) {
-		System.out.println("In service class createAccount Method " + customerDto);
-		// TODO Auto-generated method stub
+		
 		Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
 		Optional<Customer> optionalCustomer = customerRepository.findByMobileNumber(customerDto.getMobileNumber());
 		if (optionalCustomer.isPresent()) {
@@ -51,7 +50,6 @@ public class AccountsServiceImpl implements IAccountsService {
 		newAccount.setBranchAddress(AccountsConstants.ADDRESS);
 		newAccount.setCreatedAt(LocalDateTime.now());
 		newAccount.setCreatedBy("Sunny");
-		System.out.println("Inside createNewAccount " + newAccount);
 		return newAccount;
 	}
 
