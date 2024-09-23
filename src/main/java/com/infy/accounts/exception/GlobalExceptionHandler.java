@@ -13,6 +13,17 @@ import com.infy.accounts.dto.ErrorResponseDto;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception  exception, WebRequest webRequest){
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+				webRequest.getDescription(false),
+				HttpStatus.INTERNAL_SERVER_ERROR,
+				exception.getMessage(),
+				LocalDateTime.now()
+				);
+		return new ResponseEntity<ErrorResponseDto>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	@ExceptionHandler(CustomerAlreadyExistsException.class)
 	public ResponseEntity<ErrorResponseDto> handleCustomerAlreadyExistsException(CustomerAlreadyExistsException exception, WebRequest webRequest){
 		ErrorResponseDto errorResponseDto =  new ErrorResponseDto(
