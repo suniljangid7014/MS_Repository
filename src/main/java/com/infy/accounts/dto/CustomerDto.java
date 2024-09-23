@@ -8,7 +8,6 @@ public class CustomerDto {
 
 	public CustomerDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public CustomerDto(String name, String email, String mobileNumber, AccountsDto accountsDto) {
