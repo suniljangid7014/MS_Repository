@@ -1,12 +1,18 @@
 package com.infy.accounts.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 public class AccountsDto {
 
+	@NotEmpty(message = "Account Number can not be null or empty")
+	@Pattern(regexp = "(^[0-9]{10}$)", message = "Account number should be of 10 digits")
 	private Long accountNumber;
 
+	@NotEmpty(message = "Account type can not be null or empty")
 	private String accountType;
 
+	@NotEmpty(message = "Branch Address  can not be null or empty")
 	private String branchAddress;
 
 	public AccountsDto() {
@@ -50,6 +56,5 @@ public class AccountsDto {
 		return "AccountsDto [accountNumber=" + accountNumber + ", accountType=" + accountType + ", branchAddress="
 				+ branchAddress + "]";
 	}
-	
-	
+
 }

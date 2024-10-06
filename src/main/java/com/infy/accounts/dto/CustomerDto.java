@@ -1,9 +1,23 @@
 package com.infy.accounts.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class CustomerDto {
+
+	@NotEmpty(message = "Name can not be null or empty")
+	@Size(min = 3, max = 30, message = "The length of name should be between 3 and 30")
 	private String name;
+
+	@NotEmpty(message = "Email should  not be empty")
+	@Email(message = "Email address should be valid value")
 	private String email;
+
+	@Pattern(regexp = "(^[6-9]\\d{9}$)", message = "Mobile number should be of 10 digits")
 	private String mobileNumber;
+
 	private AccountsDto accountsDto;
 
 	public CustomerDto() {
